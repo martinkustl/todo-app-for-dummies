@@ -1,0 +1,15 @@
+/rest-api/node_modules
+/rest-api/public/hot
+/rest-api/public/storage
+/rest-api/storage/*.key
+/rest-api/vendor
+/rest-api/.env
+/rest-api/.env.backup
+/rest-api/.phpunit.result.cache
+/rest-api/docker-compose.override.yml
+/rest-api/Homestead.json
+/rest-api/Homestead.yaml
+/rest-api/npm-debug.log
+/rest-api/yarn-error.log
+/.idea
+/.vscode
