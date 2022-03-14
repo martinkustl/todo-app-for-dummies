@@ -18,6 +18,6 @@
 		<Input label="Kategorie" name="category" bind:value={categoryInput} />
 	</div>
 	<footer class="flex items-center justify-center">
-		<SubmitButton />
+		<SubmitButton btnText="Vytvořit kategorii" />
 	</footer>
 </form>
