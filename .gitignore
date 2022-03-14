@@ -13,3 +13,14 @@
 /rest-api/yarn-error.log
 /.idea
 /.vscode
+
+
+/frontend/.DS_Store
+/frontend/node_modules
+/frontend/build
+/frontend/.svelte-kit
+/frontend/package
+/frontend/.env
+/frontend/.env.*
+/frontend/!.env.example
+
