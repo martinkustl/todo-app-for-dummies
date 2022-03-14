@@ -1,7 +1,9 @@
 <script>
-	import Nav from '../components/nav.svelte';
+	import Nav from '../components/Layout/Nav.svelte';
 	import '../app.css';
 </script>
 
 <Nav />
-<slot />
+<main class="p-6">
+	<slot />
+</main>
