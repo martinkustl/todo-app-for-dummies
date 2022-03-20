@@ -3,7 +3,7 @@
 </script>
 
 <input
-	class="flex bg-emerald-400 rounded-md pl-10 pr-10 pb-2 pt-2"
+	class="flex bg-emerald-500 text-white rounded-md pl-10 pr-10 pb-2 pt-2"
 	type="submit"
 	value={btnText ?? 'Uložit'}
 />
