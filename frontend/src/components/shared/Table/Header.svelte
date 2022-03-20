@@ -5,9 +5,9 @@
 </script>
 
 <thead>
-	<tr>
+	<tr class="border-b-2">
 		{#each Object.entries(headers) as [_, header]}
-			<th class="p-1">{header.name}</th>
+			<th class="p-2">{header.name}</th>
 		{/each}
 	</tr>
 </thead>

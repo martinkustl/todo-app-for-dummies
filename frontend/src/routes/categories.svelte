@@ -57,43 +57,20 @@
 	};
 </script>
 
-<form
-	class="pl-10 pr-10 flex ml-auto mr-auto space-y-4 flex-col w-8/12"
-	on:submit|preventDefault={handleSubmitNewCategory}
->
-	<h2 class="text-center text-lg font-semibold">Nová kategorie</h2>
-	<div>
-		<Input label="Kategorie" name="category" />
-	</div>
-	<footer class="flex items-center justify-center">
-		<SubmitButton btnText="Vytvořit kategorii" />
-	</footer>
-	<section>
-		{#if categories.length === 0}
-			<p>Žádné kategorie k zobrazení</p>
-		{:else}
-			<Table {headers} rows={categories} let:row={category}>
-				<EditCategoryForm {category} />
-			</Table>
-		{/if}
-		<!-- {#await fetchCategories then { parsedBody: categories }}
-			{#if !categories || categories.length === 0}
-				<p>Žádné kategorie k zobrazení</p>
-			{:else}
-				<Table {headers} rows={categories} let:row={category}>
-					<EditCategoryForm {category} />
-				</Table>
-			{/if}
-		{:catch err}
-			<p>Error :-(</p>
-		{/await} -->
-	</section>
-</form>
-
-<!-- {#await fetchImage}
-	<p>...waiting</p>
-{:then data}
-	<img src={data.message} alt="Dog image" />
-{:catch error}
-	<p>An error occurred!</p>
-{/await} -->
+<section>
+	<form
+		class="pl-10 pr-10 flex ml-auto mr-auto space-y-4 flex-col w-8/12"
+		on:submit|preventDefault={handleSubmitNewCategory}
+	>
+		<h2 class="text-center text-lg font-semibold">Nová kategorie</h2>
+		<div>
+			<Input label="Kategorie" name="category" />
+		</div>
+		<footer class="flex items-center justify-center">
+			<SubmitButton btnText="Vytvořit kategorii" />
+		</footer>
+	</form>
+</section>
+<Table {headers} rows={categories} let:row={category}>
+	<EditCategoryForm {category} />
+</Table>
