@@ -51,21 +51,32 @@ class CategoryController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Category $category)
     {
-        //
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:45'
+        ]);
+
+
+        $category->name = $validated['name'];
+        $category->save();
+
+        return response()->json($category);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return response()->json($category);
     }
 }
