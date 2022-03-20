@@ -54,7 +54,7 @@
 		}
 	};
 
-	// Typeguard to force Category, as generics are not yet available in Svelte
+	// Type guard to force Category, as generics are not yet available in Svelte
 	function isCategory(row: TableBodyRow): row is Category {
 		return typeof row.name === 'string';
 	}

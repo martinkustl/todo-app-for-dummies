@@ -1,4 +1,6 @@
 <script lang="ts">
+	import DeleteIcon from '../Icons/DeleteIcon.svelte';
+	import EditIcon from '../Icons/EditIcon.svelte';
 	import Modal from '../Modal/Modal.svelte';
 
 	import Column from './Column.svelte';
@@ -15,5 +17,12 @@
 			<slot />
 		</Modal>
 	{/if}
-	<button on:click={handleEditButtonClick}>Edit</button>
+	<div class="w-full flex space-x-3">
+		<button on:click={handleEditButtonClick}>
+			<EditIcon />
+		</button>
+		<button>
+			<DeleteIcon />
+		</button>
+	</div>
 </Column>
