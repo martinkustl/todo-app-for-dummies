@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Modal from '../Modal/Modal.svelte';
+
 	import Column from './Column.svelte';
 
 	let isOpen = false;
@@ -9,7 +11,9 @@
 
 <Column>
 	{#if isOpen}
-		<slot />
+		<Modal bind:isOpen>
+			<slot />
+		</Modal>
 	{/if}
 	<button on:click={handleEditButtonClick}>Edit</button>
 </Column>

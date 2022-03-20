@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="T extends boolean">
 	import type { TableBodyRows, TableHeaderColumns } from '../../../types';
 	import Header from './Header.svelte';
 	import Actions from './Actions.svelte';

@@ -14,3 +14,8 @@ export type AnyAppRecord = {
 export type TableBodyRow = AnyAppRecord;
 
 export type TableBodyRows = TableBodyRow[];
+
+export type Category = {
+	id: number;
+	name: string;
+};

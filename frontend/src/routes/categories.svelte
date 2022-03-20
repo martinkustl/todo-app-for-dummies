@@ -1,10 +1,13 @@
 <script lang="ts">
 	import Table from '../components/shared/Table/Table.svelte';
+	// import { http } from '../common';
+	// ../type-guards.tsbmitButton from '../components/shared/Buttons/SubmitButton.svelte';
 	import { http } from '../common';
 	import SubmitButton from '../components/shared/Buttons/SubmitButton.svelte';
 	import Input from '../components/shared/Inputs/Input.svelte';
 	import EditCategoryForm from '../components/Categories/EditCategoryForm.svelte';
 	import { onMount } from 'svelte';
+	import type { Category, TableBodyRow } from 'src/types';
 
 	const headers = {
 		name: {
@@ -13,11 +16,6 @@
 		actions: {
 			name: 'Akce'
 		}
-	};
-
-	type Category = {
-		id: number;
-		name: string;
 	};
 
 	let categories: Category[] = [];
@@ -55,6 +53,11 @@
 			console.log(err);
 		}
 	};
+
+	// Typeguard to force Category, as generics are not yet available in Svelte
+	function isCategory(row: TableBodyRow): row is Category {
+		return typeof row.name === 'string';
+	}
 </script>
 
 <section>
@@ -72,5 +75,7 @@
 	</form>
 </section>
 <Table {headers} rows={categories} let:row={category}>
-	<EditCategoryForm {category} />
+	{#if isCategory(category)}
+		<EditCategoryForm {category} />
+	{/if}
 </Table>
