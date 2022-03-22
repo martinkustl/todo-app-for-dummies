@@ -54,10 +54,10 @@
 		}
 	};
 
-	const handleSubmitEditCategory = async (e: SubmitEvent) => {
-		if (!e.target || !$editableCategory) return;
+	const handleSubmitEditCategory = async (e: CustomEvent<SubmitEvent>) => {
+		if (!e.detail.target || !$editableCategory) return;
 
-		const formEl = e.target as HTMLFormElement;
+		const formEl = e.detail.target as HTMLFormElement;
 
 		try {
 			const { parsedBody } = await http<Category>(
