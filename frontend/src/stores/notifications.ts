@@ -1,4 +1,5 @@
-import { writable, derived, type Readable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 
 type Notification = {
 	id: string;
@@ -7,7 +8,7 @@ type Notification = {
 	timeout: number;
 };
 
-const createNotificationStore = (timeout = 3000) => {
+const createNotificationStore = (timeout = 4000) => {
 	const _notifications = writable<Notification[]>([]);
 
 	function send(message: string, type = 'default', timeout: number) {
@@ -45,6 +46,7 @@ const createNotificationStore = (timeout = 3000) => {
 		success: (msg: string) => send(msg, 'success', timeout)
 	};
 };
+
 function id() {
 	return '_' + Math.random().toString(36).substring(2, 9);
 }
