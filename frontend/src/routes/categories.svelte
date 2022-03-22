@@ -2,12 +2,11 @@
 	import Table from '../components/shared/Table/Table.svelte';
 	import { editableCategory } from '../stores/categories';
 	import { createRecord, deleteRecord, http, updateRecord } from '../common';
-	import SubmitButton from '../components/shared/Buttons/SubmitButton.svelte';
-	import Input from '../components/shared/Inputs/Input.svelte';
 	import EditCategoryModalForm from '../components/Categories/EditCategoryModalForm.svelte';
 	import { onMount } from 'svelte';
 	import type { Category, TableBodyRow } from '../types';
 	import { apiBaseUrl } from '../common';
+	import CreateCategoryForm from '../components/Categories/CreateCategoryForm.svelte';
 
 	const headers = {
 		name: {
@@ -32,38 +31,6 @@
 		}
 	});
 
-	const handleSubmitNewCategory = async (e: SubmitEvent) => {
-		if (!e.target) return;
-
-		const formEl = e.target as HTMLFormElement;
-		const { parsedBody } = await http<Category>({
-			input: `${apiBaseUrl}/categories`,
-			body: { name: formEl.category.value },
-			method: 'POST'
-		});
-
-		if (parsedBody) {
-			categories = createRecord(categories, parsedBody);
-		}
-	};
-
-	const handleSubmitEditCategory = async (e: CustomEvent<SubmitEvent>) => {
-		if (!e.detail.target || !$editableCategory) return;
-
-		const formEl = e.detail.target as HTMLFormElement;
-
-		const { parsedBody } = await http<Category>({
-			input: `${apiBaseUrl}/categories/${$editableCategory.id}`,
-			body: { name: formEl.category.value },
-			method: 'PUT'
-		});
-
-		if (parsedBody) {
-			categories = updateRecord(categories, parsedBody);
-		}
-		editableCategory.set(undefined);
-	};
-
 	const handleEditClick = (row: TableBodyRow) => {
 		editableCategory.set(row as Category);
 	};
@@ -82,20 +49,11 @@
 	};
 </script>
 
-<section>
-	<form
-		class="pl-10 pr-10 flex ml-auto mr-auto space-y-4 flex-col w-8/12"
-		on:submit|preventDefault={handleSubmitNewCategory}
-	>
-		<h2 class="text-center text-lg font-semibold">Nová kategorie</h2>
-		<div>
-			<Input label="Kategorie" name="category" />
-		</div>
-		<footer class="flex items-center justify-center">
-			<SubmitButton btnText="Vytvořit kategorii" />
-		</footer>
-	</form>
-</section>
+<CreateCategoryForm
+	onAddToCategories={(newCategory) => {
+		categories = createRecord(categories, newCategory);
+	}}
+/>
 <Table
 	{headers}
 	rows={categories}
@@ -103,4 +61,8 @@
 	onDeleteClick={handleDeleteClick}
 />
 
-<EditCategoryModalForm onSubmit={handleSubmitEditCategory} />
+<EditCategoryModalForm
+	onUpdateCategories={(updatedCategory) => {
+		categories = updateRecord(categories, updatedCategory);
+	}}
+/>
