@@ -7,6 +7,7 @@
 	import EditCategoryModalForm from '../components/Categories/EditCategoryModalForm.svelte';
 	import { onMount } from 'svelte';
 	import type { Category, TableBodyRow } from '../types';
+	import { apiBaseUrl } from '../common';
 
 	const headers = {
 		name: {
@@ -19,38 +20,30 @@
 
 	let categories: Category[] = [];
 
+	// Life cycle method
 	onMount(async () => {
-		try {
-			const { parsedBody } = await await http<Category[]>(`http://localhost:5000/api/categories`);
+		const { parsedBody } = await http<Category[]>({
+			input: `${apiBaseUrl}/categories`,
+			method: 'GET'
+		});
 
-			if (parsedBody) {
-				categories = parsedBody;
-			}
-		} catch (err) {
-			// TODO - add error handling
-			console.log(err);
+		if (parsedBody) {
+			categories = parsedBody;
 		}
 	});
-
-	// TODO - refactor all async methods
 
 	const handleSubmitNewCategory = async (e: SubmitEvent) => {
 		if (!e.target) return;
 
 		const formEl = e.target as HTMLFormElement;
+		const { parsedBody } = await http<Category>({
+			input: `${apiBaseUrl}/categories`,
+			body: { name: formEl.category.value },
+			method: 'POST'
+		});
 
-		try {
-			const { parsedBody } = await http<Category>(`http://localhost:5000/api/categories`, {
-				method: 'POST',
-				body: JSON.stringify({ name: formEl.category.value })
-			});
-
-			if (parsedBody) {
-				// categories = [...categories, { ...parsedBody }];
-				categories = createRecord(categories, parsedBody);
-			}
-		} catch (err) {
-			console.log(err);
+		if (parsedBody) {
+			categories = createRecord(categories, parsedBody);
 		}
 	};
 
@@ -59,22 +52,16 @@
 
 		const formEl = e.detail.target as HTMLFormElement;
 
-		try {
-			const { parsedBody } = await http<Category>(
-				`http://localhost:5000/api/categories/${$editableCategory.id}`,
-				{
-					method: 'PUT',
-					body: JSON.stringify({ name: formEl.category.value })
-				}
-			);
+		const { parsedBody } = await http<Category>({
+			input: `${apiBaseUrl}/categories/${$editableCategory.id}`,
+			body: { name: formEl.category.value },
+			method: 'PUT'
+		});
 
-			if (parsedBody) {
-				categories = updateRecord(categories, parsedBody);
-			}
-			editableCategory.set(undefined);
-		} catch (err) {
-			console.log(err);
+		if (parsedBody) {
+			categories = updateRecord(categories, parsedBody);
 		}
+		editableCategory.set(undefined);
 	};
 
 	const handleEditClick = (row: TableBodyRow) => {
@@ -84,19 +71,13 @@
 	const handleDeleteClick = async (row: TableBodyRow) => {
 		const category = row as Category;
 
-		try {
-			const { parsedBody } = await http<Category>(
-				`http://localhost:5000/api/categories/${category.id}`,
-				{
-					method: 'DELETE'
-				}
-			);
+		const { parsedBody } = await http<Category>({
+			input: `${apiBaseUrl}/categories/${category.id}`,
+			method: 'DELETE'
+		});
 
-			if (parsedBody) {
-				categories = deleteRecord(categories, parsedBody);
-			}
-		} catch (err) {
-			console.log(err);
+		if (parsedBody) {
+			categories = deleteRecord(categories, parsedBody);
 		}
 	};
 </script>
