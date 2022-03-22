@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
             $table->string('activity', 45);
-            $table->timestamp('deadline');
+            $table->timestampTz('deadline');
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('state_id')->constrained('states');
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class StateController extends Controller
@@ -10,7 +11,7 @@ class StateController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -20,8 +21,8 @@ class StateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -39,8 +40,8 @@ class StateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\State $state
-     * @return \Illuminate\Http\JsonResponse
+     * @param State $state
+     * @return JsonResponse
      */
     public function show(State $state)
     {
@@ -50,9 +51,9 @@ class StateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\State $state
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @param State $state
+     * @return JsonResponse
      */
     public function update(Request $request, State $state)
     {
@@ -68,8 +69,8 @@ class StateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\State $state
-     * @return \Illuminate\Http\JsonResponse
+     * @param State $state
+     * @return JsonResponse
      */
     public function destroy(State $state)
     {
