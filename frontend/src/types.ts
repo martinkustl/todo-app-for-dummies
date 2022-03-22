@@ -24,3 +24,11 @@ export type State = {
 	id: number;
 	name: string;
 };
+
+export type Todo = {
+	id: number;
+	activity: string;
+	deadline: string;
+	category: Category;
+	state: State;
+};

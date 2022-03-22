@@ -7,7 +7,7 @@
 </script>
 
 <div class="w-full flex">
-	<label class="mr-8" for="input_{name}">{label}</label>
+	<label class="mr-8 w-20" for="input_{name}">{label}</label>
 	<input
 		class="border border-slate-500 flex-1 pl-1 pr-1"
 		{value}

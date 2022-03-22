@@ -16,7 +16,7 @@
 		on:submit|preventDefault={handleSubmit}
 	>
 		<h2 class="text-center text-lg font-semibold">{headingText}</h2>
-		<div>
+		<div class="flex flex-col space-y-4">
 			<slot />
 		</div>
 		<footer class="flex items-center justify-center">
