@@ -11,17 +11,9 @@ type Http = {
 	body?: any;
 	method: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE';
 	settings?: RequestInit;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	onError?: (err: HttpError) => void;
 };
 
-export async function http<T>({
-	input,
-	body,
-	method,
-	settings,
-	onError
-}: Http): Promise<HttpResponse<T>> {
+export async function http<T>({ input, body, method, settings }: Http): Promise<HttpResponse<T>> {
 	try {
 		// body?: BodyInit | null;
 
@@ -35,26 +27,18 @@ export async function http<T>({
 			...settings
 		});
 
+		const jsonResponse = await res.json();
+
 		if (!res.ok) {
-			// throw await res.json();
-			throw new HttpError(400, 'Unknown error');
+			throw new HttpError(400, JSON.stringify(jsonResponse.errors));
 		}
 
-		const parsedBody = await res.json();
+		if (!jsonResponse) return { ...res };
 
-		if (!parsedBody) return { ...res };
-
-		return { ...res, parsedBody };
+		return { ...res, parsedBody: jsonResponse };
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (err: any) {
-		if (err instanceof HttpError && onError) {
-			onError(err);
-		}
-
-		console.log(err);
-
 		if (err instanceof HttpError) {
-			console.log('got here!');
 			notifications.danger(`Error! Code: ${err.statusCode}, Message: ${err.message}`);
 		}
 

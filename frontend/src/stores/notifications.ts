@@ -7,7 +7,7 @@ type Notification = {
 	timeout: number;
 };
 
-const createNotificationStore = (timeout = 2000) => {
+const createNotificationStore = (timeout = 3000) => {
 	const _notifications = writable<Notification[]>([]);
 
 	function send(message: string, type = 'default', timeout: number) {
