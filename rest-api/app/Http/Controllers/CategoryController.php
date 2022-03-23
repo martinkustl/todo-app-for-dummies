@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Todo;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -75,6 +76,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $categoryTodo = Todo::where('category_id', $category->id)->first();
+
+        if ($categoryTodo) {
+            abort(422, 'Category contains todos, so it can\'t be deleted!');
+        }
+
+
         $category->delete();
 
         return response()->json($category);

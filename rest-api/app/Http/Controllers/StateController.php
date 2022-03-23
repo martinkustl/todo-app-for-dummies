@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
+use App\Models\Todo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -74,6 +75,10 @@ class StateController extends Controller
      */
     public function destroy(State $state)
     {
+        $stateTodo = Todo::where('category_id', $state->id)->first();
+        if ($stateTodo) {
+            abort(422, 'State contains todos, so it can\'t be deleted!');
+        }
         $state->delete();
         return response()->json($state);
     }
