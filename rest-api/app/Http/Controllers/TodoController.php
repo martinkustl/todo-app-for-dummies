@@ -16,7 +16,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return response()->json(Todo::all());
+        return response()->json(Todo::with('category', 'state')->get());
     }
 
     /**
@@ -42,7 +42,7 @@ class TodoController extends Controller
         $newTodo->state_id = $validated['stateId'];
         $newTodo->save();
 
-        return response()->json($newTodo);
+        return response()->json($newTodo::with('category', 'state')->find($newTodo->id));
     }
 
     /**
@@ -67,18 +67,19 @@ class TodoController extends Controller
     {
         $validated = $request->validate([
             'activity' => 'required|string|max:45',
-            'deadline' => 'required|date_format:Y-m-d\TH:i:sP',
+            'deadline' => 'required|date',
             'categoryId' => 'required|numeric',
             'stateId' => 'required|numeric'
         ]);
 
         $todo->activity = $validated['activity'];
-        $todo->deadline = Carbon::createFromFormat("Y-m-d\TH:i:sP", $validated['deadline']);
+        $todo->deadline = $validated['deadline'];
         $todo->category_id = $validated['categoryId'];
         $todo->state_id = $validated['stateId'];
         $todo->save();
 
-        return response()->json($todo);
+
+        return response()->json($todo::with('category', 'state')->find($todo->id));
 
     }
 

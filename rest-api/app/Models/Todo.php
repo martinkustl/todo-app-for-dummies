@@ -42,8 +42,8 @@ class Todo extends Model
      * @param \DateTimeInterface $date
      * @return string
      */
-    protected function serializeDate(\DateTimeInterface $date)
-    {
-        return $date->format('Y-m-d\TH:i:sP');
-    }
+//    protected function serializeDate(\DateTimeInterface $date)
+//    {
+//        return $date->format('Y-m-d\TH:i:sP');
+//    }
 }
