@@ -9,7 +9,7 @@ type Http = {
 	input: RequestInfo;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	body?: any;
-	method: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE';
+	method: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
 	settings?: RequestInit;
 };
 
@@ -30,6 +30,9 @@ export async function http<T>({ input, body, method, settings }: Http): Promise<
 		const jsonResponse = await res.json();
 
 		if (!res.ok) {
+			if (!jsonResponse.errors)
+				throw new HttpError(res.status, JSON.stringify(jsonResponse.message));
+
 			throw new HttpError(res.status, JSON.stringify(jsonResponse.errors));
 		}
 
