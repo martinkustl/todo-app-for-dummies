@@ -48,3 +48,7 @@ export type RawTodo = {
 	category: Category;
 	state: State;
 };
+
+export type HttpResponseBody = {
+	[key: string]: string | number | boolean | Date | Record<string, unknown>;
+};

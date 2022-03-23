@@ -1,12 +1,29 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { http } from '../../../common';
 	import SubmitButton from '../Buttons/SubmitButton.svelte';
+	import type { HttpResponseBody } from '../../../types';
 
 	export let headingText: string;
-	const dispatch = createEventDispatcher();
+	export let url: string;
+	// export let body: Record<string, string | Date | number | boolean>;
+	export let setHttpBody: (
+		formEl: HTMLFormElement
+	) => Record<string, string | Date | number | boolean>;
+	export let onRecordCreated: (parsedBody: HttpResponseBody) => void;
 
-	const handleSubmit = (e: SubmitEvent) => {
-		dispatch('submit', e);
+	const handleSubmit = async (e: SubmitEvent) => {
+		if (!e.target) return;
+		const formEl = e.target as HTMLFormElement;
+
+		const { parsedBody } = await http<any>({
+			input: url,
+			body: setHttpBody(formEl),
+			method: 'POST'
+		});
+
+		if (parsedBody) {
+			onRecordCreated(parsedBody);
+		}
 	};
 </script>
 
