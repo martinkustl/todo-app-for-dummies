@@ -1,4 +1,4 @@
-import { HttpError } from '../common/errors';
+import { HttpError } from './errors';
 import { notifications } from '../stores/notifications';
 
 interface HttpResponse<T> extends Response {
@@ -30,7 +30,7 @@ export async function http<T>({ input, body, method, settings }: Http): Promise<
 		const jsonResponse = await res.json();
 
 		if (!res.ok) {
-			throw new HttpError(400, JSON.stringify(jsonResponse.errors));
+			throw new HttpError(res.status, JSON.stringify(jsonResponse.errors));
 		}
 
 		if (!jsonResponse) return { ...res };
