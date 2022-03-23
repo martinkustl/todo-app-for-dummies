@@ -1,51 +1,77 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { editableCategory } from '../stores/categories';
-	import { createRecord, deleteRecord, http, updateRecord } from '../common';
-	import type { Category, TableBodyRow, State, Todo } from '../types';
-	import { apiBaseUrl } from '../common';
-	import CreateTodoForm from '../components/Todos/CreateTodoForm.svelte';
+    import {onMount} from 'svelte';
+    import {editableTodo} from '../stores/todos';
+    import {createRecord, deleteRecord, http, updateRecord, transformTodoForTable} from '../common';
+    import type {TableBodyRow, Todo, RawTodo} from '../types';
+    import {apiBaseUrl} from '../common';
+    import CreateTodoForm from '../components/Todos/CreateTodoForm.svelte';
+    import Table from '../components/shared/Table/Table.svelte';
+    import EditTodoModalForm from '../components/Todos/EditTodoModalForm.svelte';
 
-	// $table->id();
-	//         $table->timestamps();
-	//         $table->string('activity', 45);
-	//         $table->timestamp('deadline');
-	//         $table->foreignId('category_id')->constrained('categories');
-	//         $table->foreignId('state_id')->constrained('states');
-	let states: State[];
-	let categories: Category[];
-	let todos: Todo[];
+    const headers = {
+        category: {
+            name: 'Kategorie'
+        },
+        activity: {
+            name: 'Činnost'
+        },
+        deadline: {
+            name: 'Deadline',
+            type: 'date'
+        },
+        state: {
+            name: 'Plnění'
+        },
+        actions: {
+            name: 'Akce'
+        }
+    };
 
-	onMount(async () => {
-		const { parsedBody: parsedStatesBody } = await http<State[]>({
-			input: `${apiBaseUrl}/states`,
-			method: 'GET'
-		});
+    let todos: Todo[];
 
-		const { parsedBody: parsedCategoriesBody } = await http<Category[]>({
-			input: `${apiBaseUrl}/categories`,
-			method: 'GET'
-		});
+    onMount(async () => {
+        const {parsedBody} = await http<RawTodo[]>({
+            input: `${apiBaseUrl}/todos`,
+            method: 'GET'
+        });
 
-		const { parsedBody: parsedTodosBody } = await http<Todo[]>({
-			input: `${apiBaseUrl}/categories`,
-			method: 'GET'
-		});
+        if (parsedBody) {
+            todos = transformTodosForTable(parsedBody);
+        }
+    });
 
-		if (parsedStatesBody && parsedCategoriesBody && parsedTodosBody) {
-			states = parsedStatesBody;
-			categories = parsedCategoriesBody;
-			todos = parsedTodosBody;
-		}
+    const transformTodosForTable = (fetchedTodos: RawTodo[]) => {
+        return fetchedTodos.map(transformTodoForTable);
+    };
 
-		// if (parsedBody) {
-		// 	categories = parsedBody;
-		// }
+    const handleEditClick = (row: TableBodyRow) => {
+        editableTodo.set(row as Todo);
+    };
 
-		// if (parsedBody) {
-		// 	states = parsedBody;
-		// }
-	});
+    const handleDeleteClick = async (row: TableBodyRow) => {
+        const todo = row as Todo;
+
+        const {parsedBody} = await http<Todo>({
+            input: `${apiBaseUrl}/todos/${todo.id}`,
+            method: 'DELETE'
+        });
+
+        if (parsedBody) {
+            todos = deleteRecord<Todo>(todos, parsedBody);
+        }
+    };
 </script>
 
-<CreateTodoForm onAddToTodos={(todo) => console.log(todo)} />
+<CreateTodoForm
+        onAddToTodos={(newTodo) => {
+		console.log(newTodo);
+		todos = createRecord(todos, transformTodoForTable(newTodo));
+		console.log(todos);
+	}}
+/>
+<Table {headers} rows={todos} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick}/>
+<EditTodoModalForm
+        onUpdateTodos={(updatedTodo) => {
+		todos = updateRecord(todos, updatedTodo);
+	}}
+/>

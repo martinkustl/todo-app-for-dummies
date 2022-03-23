@@ -5,7 +5,7 @@
 	import type { State } from '../../types';
 	import { apiBaseUrl, http } from '../../common';
 
-	export let onUpdateStates: (category: State) => void;
+	export let onUpdateStates: (todo: State) => void;
 
 	const handleSubmitUpdateState = async (e: CustomEvent<SubmitEvent>) => {
 		if (!e.detail.target || !$editableState) return;
