@@ -23,5 +23,5 @@
 </script>
 
 <CreateRecordForm headingText="Nový stav plnění" on:submit={handleSubmitNewState}>
-	<Input label="Stav plnění" name="state" />
+	<Input label="Stav plnění" name="state" required />
 </CreateRecordForm>

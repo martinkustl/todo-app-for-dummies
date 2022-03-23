@@ -31,6 +31,6 @@
 		on:cancelClick={() => editableCategory.set(undefined)}
 		on:submit={handleSubmitUpdateCategory}
 	>
-		<Input label="Název kategorie" name="category" value={$editableCategory.name} />
+		<Input label="Název kategorie" name="category" value={$editableCategory.name} required />
 	</UpdateRecordForm>
 {/if}

@@ -31,6 +31,6 @@
 		on:cancelClick={() => editableState.set(undefined)}
 		on:submit={handleSubmitUpdateState}
 	>
-		<Input label="Název stavu plnění" name="state" value={$editableState.name} />
+		<Input label="Název stavu plnění" name="state" value={$editableState.name} required />
 	</UpdateRecordForm>
 {/if}

@@ -23,5 +23,5 @@
 </script>
 
 <CreateRecordForm headingText="Nová kategorie" on:submit={handleSubmitNewCategory}>
-	<Input label="Kategorie" name="category" />
+	<Input label="Kategorie" name="category" required />
 </CreateRecordForm>
