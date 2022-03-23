@@ -1,7 +1,15 @@
 <script lang="ts">
 	import Modal from '../Modal/Modal.svelte';
 	import SubmitButton from '../Buttons/SubmitButton.svelte';
+	import type { HttpResponseBody } from '../../../types';
+	import { http } from '../../../common';
+
 	export let headingText: string;
+	export let url: string;
+	export let setHttpBody: (
+		formEl: HTMLFormElement
+	) => Record<string, string | Date | number | boolean>;
+	export let onRecordUpdated: (parsedBody: HttpResponseBody) => void;
 
 	import { createEventDispatcher } from 'svelte';
 
@@ -11,8 +19,19 @@
 		dispatch('cancelClick');
 	};
 
-	const handleSubmit = (e: SubmitEvent) => {
-		dispatch('submit', e);
+	const handleSubmit = async (e: SubmitEvent) => {
+		if (!e.target) return;
+		const formEl = e.target as HTMLFormElement;
+
+		const { parsedBody } = await http<any>({
+			input: url,
+			body: setHttpBody(formEl),
+			method: 'PUT'
+		});
+
+		if (parsedBody) {
+			onRecordUpdated(parsedBody);
+		}
 	};
 </script>
 

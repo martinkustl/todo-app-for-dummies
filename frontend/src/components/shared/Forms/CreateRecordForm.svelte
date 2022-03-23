@@ -5,7 +5,6 @@
 
 	export let headingText: string;
 	export let url: string;
-	// export let body: Record<string, string | Date | number | boolean>;
 	export let setHttpBody: (
 		formEl: HTMLFormElement
 	) => Record<string, string | Date | number | boolean>;

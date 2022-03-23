@@ -14,7 +14,7 @@
 
 <CreateRecordForm
 	headingText="Nový stav plnění"
-	url={`${apiBaseUrl}/states`}
+	url="{apiBaseUrl}/states"
 	setHttpBody={(formEl) => ({
 		name: formEl.state.value
 	})}

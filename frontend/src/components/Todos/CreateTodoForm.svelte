@@ -44,7 +44,7 @@
 				categoryId: formEl.category.value,
 				stateId: formEl.state.value
 			})}
-			url={`${apiBaseUrl}/todos`}
+			url="{apiBaseUrl}/todos"
 			onRecordCreated={handleTodoCreated}
 		>
 			<Input label="Činnost" name="activity" required />

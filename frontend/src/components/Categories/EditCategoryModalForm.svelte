@@ -2,25 +2,14 @@
 	import { editableCategory } from '../../stores/categories';
 	import Input from '../shared/Inputs/Input.svelte';
 	import UpdateRecordForm from '../shared/Forms/UpdateRecordForm.svelte';
-	import type { Category } from '../../types';
-	import { apiBaseUrl, http } from '../../common';
+	import type { Category, HttpResponseBody } from '../../types';
+	import { apiBaseUrl } from '../../common';
 
 	export let onUpdateCategories: (category: Category) => void;
 
-	const handleSubmitUpdateCategory = async (e: CustomEvent<SubmitEvent>) => {
-		if (!e.detail.target || !$editableCategory) return;
-
-		const formEl = e.detail.target as HTMLFormElement;
-
-		const { parsedBody } = await http<Category>({
-			input: `${apiBaseUrl}/categories/${$editableCategory.id}`,
-			body: { name: formEl.category.value },
-			method: 'PUT'
-		});
-
-		if (parsedBody) {
-			onUpdateCategories(parsedBody);
-		}
+	const handleCategoryUpdated = (parsedBody: HttpResponseBody) => {
+		const parsedCategory = parsedBody as Category;
+		onUpdateCategories(parsedCategory);
 		editableCategory.set(undefined);
 	};
 </script>
@@ -29,7 +18,11 @@
 	<UpdateRecordForm
 		headingText="Editace kategorie"
 		on:cancelClick={() => editableCategory.set(undefined)}
-		on:submit={handleSubmitUpdateCategory}
+		url="{apiBaseUrl}/categories/{$editableCategory.id}"
+		onRecordUpdated={handleCategoryUpdated}
+		setHttpBody={(formEl) => ({
+			name: formEl.category.value
+		})}
 	>
 		<Input label="Název kategorie" name="category" value={$editableCategory.name} required />
 	</UpdateRecordForm>

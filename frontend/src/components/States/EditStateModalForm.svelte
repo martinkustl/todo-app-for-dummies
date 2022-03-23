@@ -2,25 +2,14 @@
 	import { editableState } from '../../stores/states';
 	import Input from '../shared/Inputs/Input.svelte';
 	import UpdateRecordForm from '../shared/Forms/UpdateRecordForm.svelte';
-	import type { State } from '../../types';
-	import { apiBaseUrl, http } from '../../common';
+	import type { HttpResponseBody, State } from '../../types';
+	import { apiBaseUrl } from '../../common';
 
 	export let onUpdateStates: (todo: State) => void;
 
-	const handleSubmitUpdateState = async (e: CustomEvent<SubmitEvent>) => {
-		if (!e.detail.target || !$editableState) return;
-
-		const formEl = e.detail.target as HTMLFormElement;
-
-		const { parsedBody } = await http<State>({
-			input: `${apiBaseUrl}/states/${$editableState.id}`,
-			body: { name: formEl.state.value },
-			method: 'PUT'
-		});
-
-		if (parsedBody) {
-			onUpdateStates(parsedBody);
-		}
+	const handleStateUpdated = (parsedBody: HttpResponseBody) => {
+		const parsedState = parsedBody as State;
+		onUpdateStates(parsedState);
 		editableState.set(undefined);
 	};
 </script>
@@ -29,7 +18,11 @@
 	<UpdateRecordForm
 		headingText="Editace stavu plnění"
 		on:cancelClick={() => editableState.set(undefined)}
-		on:submit={handleSubmitUpdateState}
+		url="{apiBaseUrl}/states/{$editableState.id}"
+		onRecordUpdated={handleStateUpdated}
+		setHttpBody={(formEl) => ({
+			name: formEl.state.value
+		})}
 	>
 		<Input label="Název stavu plnění" name="state" value={$editableState.name} required />
 	</UpdateRecordForm>

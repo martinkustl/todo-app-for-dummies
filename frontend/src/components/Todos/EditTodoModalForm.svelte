@@ -4,7 +4,7 @@
 	import Input from '../shared/Inputs/Input.svelte';
 	import Select from '../shared/Inputs/Select.svelte';
 	import UpdateRecordForm from '../shared/Forms/UpdateRecordForm.svelte';
-	import type { Todo, State, Category, RawTodo } from '../../types';
+	import type { Todo, State, Category, RawTodo, HttpResponseBody } from '../../types';
 	import { apiBaseUrl, http } from '../../common';
 	import { format } from 'date-fns';
 	import { transformTodoForTable } from '../../common';
@@ -38,26 +38,9 @@
 		});
 	};
 
-	const handleSubmitUpdateState = async (e: CustomEvent<SubmitEvent>) => {
-		if (!e.detail.target || !$editableTodo) return;
-
-		const formEl = e.detail.target as HTMLFormElement;
-
-		const { parsedBody } = await http<RawTodo>({
-			input: `${apiBaseUrl}/todos/${$editableTodo.id}`,
-			body: {
-				activity: formEl.activity.value,
-				deadline: formEl.deadline.value,
-				categoryId: formEl.category.value,
-				stateId: formEl.state.value
-			},
-			method: 'PUT'
-		});
-
-		if (parsedBody) {
-			onUpdateTodos(transformTodoForTable(parsedBody));
-		}
-
+	const handleTodoUpdated = (parsedBody: HttpResponseBody) => {
+		const parsedTodo = parsedBody as RawTodo;
+		onUpdateTodos(transformTodoForTable(parsedTodo));
 		editableTodo.set(undefined);
 	};
 
@@ -68,7 +51,14 @@
 	<UpdateRecordForm
 		headingText="Editace todo"
 		on:cancelClick={() => editableTodo.set(undefined)}
-		on:submit={handleSubmitUpdateState}
+		onRecordUpdated={handleTodoUpdated}
+		url="{apiBaseUrl}/todos/{$editableTodo.id}"
+		setHttpBody={(formEl) => ({
+			activity: formEl.activity.value,
+			deadline: formEl.deadline.value,
+			categoryId: formEl.category.value,
+			stateId: formEl.state.value
+		})}
 	>
 		<Input label="Činnost" name="activity" value={$editableTodo.activity} required />
 		<Input
